@@ -1,0 +1,72 @@
+﻿capability_id,evidence_strength,evidence_type,pattern_text_ko,note_ko
+CAP_OBJECT_DETECTION,strong,text,객체 감지,직접 기능 언급
+CAP_OBJECT_DETECTION,strong,text,물체 감지,직접 기능 언급
+CAP_OBJECT_DETECTION,strong,text,사물 인식,직접 기능 언급
+CAP_OBJECT_DETECTION,strong,text,object detection,직접 기능 언급
+CAP_OBJECT_DETECTION,weak,text,스마트 비전,모호한 표현
+CAP_OBJECT_DETECTION,weak,text,지능형 영상 분석,모호한 표현
+CAP_OBJECT_DETECTION,weak,text,스마트 감시,모호한 표현
+CAP_PERSON_DETECTION,strong,text,사람 감지,직접 기능 언급
+CAP_PERSON_DETECTION,strong,text,인체 감지,직접 기능 언급
+CAP_PERSON_DETECTION,strong,text,human detection,직접 기능 언급
+CAP_PERSON_DETECTION,strong,text,person detection,직접 기능 언급
+CAP_PERSON_DETECTION,weak,text,움직임 감지,사람 감지와 동일하지 않음
+CAP_PERSON_DETECTION,weak,text,침입 감지,사람 이외 대상일 수 있음
+CAP_PERSON_DETECTION,weak,text,스마트 알림,모호한 표현
+CAP_FACE_DETECTION,strong,text,얼굴 감지,직접 기능 언급
+CAP_FACE_DETECTION,strong,text,얼굴 검출,직접 기능 언급
+CAP_FACE_DETECTION,strong,text,face detection,직접 기능 언급
+CAP_FACE_DETECTION,weak,text,얼굴 기능 지원,모호한 표현
+CAP_FACE_DETECTION,weak,text,스마트 얼굴 기능,모호한 표현
+CAP_FACE_RECOGNITION,strong,text,얼굴 인식,직접 기능 언급
+CAP_FACE_RECOGNITION,strong,text,face recognition,직접 기능 언급
+CAP_FACE_RECOGNITION,strong,text,사용자 식별,식별 기능 단서
+CAP_FACE_RECOGNITION,strong,text,등록 얼굴 매칭,매칭 기능 단서
+CAP_FACE_RECOGNITION,strong,text,얼굴 인증,인증 기능 단서
+CAP_FACE_RECOGNITION,weak,text,얼굴 감지,식별이 아닌 검출일 수 있음
+CAP_FACE_RECOGNITION,weak,text,스마트 출입 관리,모호한 표현
+CAP_FACE_RECOGNITION,weak,text,생체 인식 지원,구체성이 부족한 표현
+CAP_SPEECH_RECOGNITION,strong,text,음성 인식,직접 기능 언급
+CAP_SPEECH_RECOGNITION,strong,text,speech recognition,직접 기능 언급
+CAP_SPEECH_RECOGNITION,strong,text,voice to text,텍스트 변환 단서
+CAP_SPEECH_RECOGNITION,strong,text,음성 명령 인식,명령 해석 단서
+CAP_SPEECH_RECOGNITION,weak,text,음성 지원,모호한 표현
+CAP_SPEECH_RECOGNITION,weak,text,음성 기능 제공,모호한 표현
+CAP_SPEECH_RECOGNITION,weak,text,음성 제어 가능,구현 수준 불명확
+CAP_SPEAKER_RECOGNITION,strong,text,화자 인식,직접 기능 언급
+CAP_SPEAKER_RECOGNITION,strong,text,speaker recognition,직접 기능 언급
+CAP_SPEAKER_RECOGNITION,strong,text,voiceprint authentication,화자 인증 단서
+CAP_SPEAKER_RECOGNITION,strong,text,음성 사용자 인증,화자 인증 단서
+CAP_SPEAKER_RECOGNITION,weak,text,음성 인식,다른 기능과 혼동 가능
+CAP_SPEAKER_RECOGNITION,weak,text,보이스 보안,모호한 표현
+CAP_SPEAKER_RECOGNITION,weak,text,스마트 음성 인증,구체성이 부족한 표현
+CAP_ANOMALY_DETECTION,strong,text,이상 탐지,직접 기능 언급
+CAP_ANOMALY_DETECTION,strong,text,anomaly detection,직접 기능 언급
+CAP_ANOMALY_DETECTION,strong,text,비정상 패턴 감지,직접 기능 언급
+CAP_ANOMALY_DETECTION,strong,text,이상행동 감지,직접 기능 언급
+CAP_ANOMALY_DETECTION,weak,text,위험 알림,단순 알림일 수 있음
+CAP_ANOMALY_DETECTION,weak,text,실시간 모니터링,모니터링만으로는 부족
+CAP_ANOMALY_DETECTION,weak,text,스마트 보호,모호한 표현
+CAP_BEHAVIOR_ANALYSIS,strong,text,행동 분석,직접 기능 언급
+CAP_BEHAVIOR_ANALYSIS,strong,text,행동 인식,직접 기능 언급
+CAP_BEHAVIOR_ANALYSIS,strong,text,activity recognition,직접 기능 언급
+CAP_BEHAVIOR_ANALYSIS,strong,text,자세 분석,직접 기능 언급
+CAP_BEHAVIOR_ANALYSIS,strong,text,posture analysis,직접 기능 언급
+CAP_BEHAVIOR_ANALYSIS,weak,text,움직임 분석,단순 모션 분석일 수 있음
+CAP_BEHAVIOR_ANALYSIS,weak,text,활동 추적,분석이 아닌 추적일 수 있음
+CAP_BEHAVIOR_ANALYSIS,weak,text,스마트 모니터링,모호한 표현
+CAP_RECOMMENDATION,strong,text,개인화 추천,직접 기능 언급
+CAP_RECOMMENDATION,strong,text,맞춤 추천,직접 기능 언급
+CAP_RECOMMENDATION,strong,text,personalized recommendation,직접 기능 언급
+CAP_RECOMMENDATION,strong,text,추천 알고리즘 기반,알고리즘 단서
+CAP_RECOMMENDATION,weak,text,스마트 추천,모호한 표현
+CAP_RECOMMENDATION,weak,text,추천 제공,구체성이 부족한 표현
+CAP_RECOMMENDATION,weak,text,인기 상품 추천,인기순 노출일 수 있음
+CAP_PATH_PLANNING_AVOIDANCE,strong,text,경로 계획,직접 기능 언급
+CAP_PATH_PLANNING_AVOIDANCE,strong,text,path planning,직접 기능 언급
+CAP_PATH_PLANNING_AVOIDANCE,strong,text,장애물 회피,직접 기능 언급
+CAP_PATH_PLANNING_AVOIDANCE,strong,text,obstacle avoidance,직접 기능 언급
+CAP_PATH_PLANNING_AVOIDANCE,strong,text,자율 회피,회피 기능 단서
+CAP_PATH_PLANNING_AVOIDANCE,weak,text,스마트 주행,모호한 표현
+CAP_PATH_PLANNING_AVOIDANCE,weak,text,자동 이동,고정 경로일 수 있음
+CAP_PATH_PLANNING_AVOIDANCE,weak,text,지능형 내비게이션,구체성이 부족한 표현

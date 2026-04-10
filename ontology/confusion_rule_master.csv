@@ -1,0 +1,9 @@
+﻿capability_id,confused_with_id,distinction_point_ko,positive_example_ko,negative_example_ko
+CAP_PERSON_DETECTION,CAP_OBJECT_DETECTION,"사람 감지는 객체 감지의 하위 기능이며, 탐지 대상이 '사람'으로 특정되어야 함",AI 사람 감지 기능으로 사람만 선별 알림,객체 감지 기능으로 사물/차량/사람을 통합 탐지
+CAP_PERSON_DETECTION,MOTION_DETECTION_EXTERNAL,사람 감지는 움직임 자체가 아니라 사람 객체를 식별해야 함,인체 감지 시 앱 알림 제공,움직임 발생 시 녹화 시작
+CAP_FACE_RECOGNITION,CAP_FACE_DETECTION,얼굴 인식은 등록/식별/매칭 요소가 필요하고 얼굴 감지는 존재 검출에 그침,등록 사용자 얼굴 인식 후 출입 허용,카메라가 얼굴을 감지해 박스를 표시
+CAP_SPEAKER_RECOGNITION,CAP_SPEECH_RECOGNITION,화자 인식은 발화자 본인을 식별하는 기능이고 음성 인식은 발화 내용을 해석하는 기능임,등록된 사용자 음성으로 본인 인증,음성 명령을 텍스트로 변환
+CAP_ANOMALY_DETECTION,THRESHOLD_ALERT_EXTERNAL,이상 탐지는 정상 패턴 대비 비정상성을 판단해야 하며 단순 임계치 초과 알림과 다름,평소 패턴과 다른 접근 행동을 이상으로 판단,온도가 30도를 넘으면 알림
+CAP_BEHAVIOR_ANALYSIS,CAP_PERSON_DETECTION,행동 분석은 시간 흐름 기반 행동 해석이 필요하고 사람 감지는 존재 탐지에 그침,낙상 행동을 인식하여 경고,사람이 화면에 들어오면 알림
+CAP_RECOMMENDATION,POPULARITY_SORT_EXTERNAL,추천은 사용자/상황/이력 반영이 있어야 하며 단순 인기순 정렬과 다름,사용자 시청 이력을 기반으로 맞춤 추천,전체 판매량 순으로 상품 노출
+CAP_PATH_PLANNING_AVOIDANCE,FIXED_ROUTE_AUTOMATION_EXTERNAL,경로 계획은 실시간 센서 기반으로 경로를 계산·수정해야 하며 고정 경로 반복과 다름,장애물을 감지해 우회 경로를 계산,미리 저장된 경로만 반복 청소

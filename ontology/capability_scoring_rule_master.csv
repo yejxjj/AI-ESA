@@ -1,0 +1,11 @@
+capability_id,required_fulfillment_weight,optional_fulfillment_weight,strong_pattern_weight,weak_pattern_weight,source_quality_weight,required_threshold_for_positive,max_optional_bonus,confusion_penalty,company_only_penalty,product_level_bonus,model_level_bonus,min_evidence_sources_for_high_confidence,note_ko
+CAP_OBJECT_DETECTION,0.6,0.15,0.15,0.05,0.1,0.7,15,20,12,8,12,2,일반 기능형 capability 기본 규칙
+CAP_PERSON_DETECTION,0.6,0.15,0.15,0.05,0.1,0.7,15,20,12,8,12,2,일반 기능형 capability 기본 규칙
+CAP_FACE_DETECTION,0.6,0.15,0.15,0.05,0.1,0.7,15,20,12,8,12,2,기본 규칙
+CAP_FACE_RECOGNITION,0.65,0.1,0.12,0.03,0.1,0.8,10,25,15,8,15,3,오인 가능성이 높거나 안전/식별에 민감하여 보수적으로 판정
+CAP_SPEECH_RECOGNITION,0.6,0.15,0.15,0.05,0.1,0.7,15,20,12,8,12,2,일반 기능형 capability 기본 규칙
+CAP_SPEAKER_RECOGNITION,0.65,0.1,0.12,0.03,0.1,0.8,10,25,15,8,15,3,오인 가능성이 높거나 안전/식별에 민감하여 보수적으로 판정
+CAP_ANOMALY_DETECTION,0.65,0.1,0.12,0.03,0.1,0.8,10,25,15,8,15,3,오인 가능성이 높거나 안전/식별에 민감하여 보수적으로 판정
+CAP_BEHAVIOR_ANALYSIS,0.65,0.1,0.12,0.03,0.1,0.8,10,25,15,8,15,3,오인 가능성이 높거나 안전/식별에 민감하여 보수적으로 판정
+CAP_RECOMMENDATION,0.6,0.15,0.15,0.05,0.1,0.7,15,20,12,8,12,2,일반 기능형 capability 기본 규칙
+CAP_PATH_PLANNING_AVOIDANCE,0.65,0.1,0.12,0.03,0.1,0.8,10,25,15,8,15,3,오인 가능성이 높거나 안전/식별에 민감하여 보수적으로 판정
