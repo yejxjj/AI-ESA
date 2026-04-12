@@ -30,21 +30,21 @@
 
 ## Dependencies
 이 프로젝트는 Python 기반으로 작성되었으며, 원활한 실행을 위해 아래 라이브러리 설치가 필요합니다.
-# Web Server
+### Web Server
 fastapi
 uvicorn
 
-# Database & Data
+### Database & Data
 sqlalchemy
 pymysql
 cryptography
 pandas
 
-# AI & API
+### AI & API
 google-genai
 OpenDartReader
 
-# Crawling & OCR
+### Crawling & OCR
 undetected-chromedriver
 selenium
 easyocr
