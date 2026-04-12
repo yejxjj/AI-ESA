@@ -1,58 +1,95 @@
 """
-ocr_analyzer.py — 상세 이미지 OCR 텍스트 추출
+ocr_analyzer.py — Gemini Vision 기반 텍스트 추출
 
-crawler.py가 캡처한 상세 이미지에서 텍스트를 추출합니다.
-추출된 텍스트는 Gemini 정제 → AI 워싱 클레임 분석에 사용됩니다.
+crawler.py가 캡처한 상세 이미지를 Gemini Vision API로 전송해
+OCR 텍스트를 추출합니다. EasyOCR 대비 CPU 부하 없이 빠르게 동작합니다.
 
 주요 처리:
-    - 한글 경로 지원: numpy로 파일 읽기 후 OpenCV 디코딩
-    - 흑백 변환으로 OCR 정확도 향상
-    - 2000px 단위 청크 분할 스캔으로 메모리 효율 확보
+    - 전송 전 이미지를 JPEG 85%로 압축해 파일 크기 최소화
+    - 이미지가 너무 크면 최대 폭 1920px로 리사이즈
+    - 실패 시 빈 문자열 반환 (downstream 에러 전파 방지)
 """
 
-import easyocr
+import os
+import io
 import cv2
 import numpy as np
-import os
+from google import genai
+from google.genai import types as genai_types
 
-# 모듈 로드 시 EasyOCR 리더를 한 번만 초기화 (한국어 + 영어)
-reader = easyocr.Reader(['ko', 'en'])
+try:
+    import sys as _sys
+    _sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+    import config as _config
+    GEMINI_API_KEY = getattr(_config, "GEMINI_API_KEY", "") or os.getenv("GEMINI_API_KEY", "")
+except Exception:
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+
+_client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
+
+_PROMPT = (
+    "이 이미지는 온라인 쇼핑몰의 제품 상세페이지 스크린샷입니다. "
+    "이미지 안에 보이는 모든 텍스트를 빠짐없이 추출해 주세요. "
+    "마케팅 문구, AI 관련 주장, 기술 스펙, 인증 정보, 제품 설명 등 "
+    "모든 글자를 원문 그대로 나열해 주세요. "
+    "설명이나 해석은 필요 없고, 텍스트만 출력해 주세요."
+)
+
+_MAX_WIDTH = 1920
 
 
-def analyze_ai_washing(image_path):
+def _load_and_compress(image_path: str) -> bytes:
+    """이미지를 읽어 필요시 리사이즈 후 JPEG bytes로 반환"""
+    img_array = np.fromfile(image_path, np.uint8)
+    img = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
+
+    h, w = img.shape[:2]
+    if w > _MAX_WIDTH:
+        scale = _MAX_WIDTH / w
+        img = cv2.resize(img, (int(w * scale), int(h * scale)), interpolation=cv2.INTER_AREA)
+        print(f"   이미지 리사이즈: {w}×{h} → {img.shape[1]}×{img.shape[0]}")
+
+    _, buf = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 85])
+    return buf.tobytes()
+
+
+def analyze_ai_washing(image_path: str) -> dict:
     """
-    이미지 파일에서 텍스트를 OCR로 추출하여 반환합니다.
+    Gemini Vision으로 이미지에서 텍스트를 추출합니다.
 
     Args:
         image_path: 분석할 이미지 파일 경로
 
     Returns:
-        {"extracted_text": str} — 추출된 전체 텍스트 (실패 또는 이미지 없으면 빈 문자열)
+        {"extracted_text": str}
     """
     if not image_path or not os.path.exists(image_path):
         return {"extracted_text": ""}
 
-    print("🤖 OCR 엔진 가동! (흑백 변환 + 청크 분할 스캔...)")
+    if not _client:
+        print("❌ GEMINI_API_KEY가 설정되지 않았습니다.")
+        return {"extracted_text": ""}
+
+    print("🤖 Gemini Vision OCR 시작...")
     try:
-        # 한글 경로 지원: numpy로 읽어서 CV2로 디코딩
-        img_array = np.fromfile(image_path, np.uint8)
-        img = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
-        gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        height = gray_img.shape[0]
+        jpeg_bytes = _load_and_compress(image_path)
+        size_kb = len(jpeg_bytes) / 1024
+        print(f"   전송 이미지 크기: {size_kb:.0f} KB")
 
-        chunk_size = 2000
-        all_texts = []
+        response = _client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=[
+                genai_types.Part(
+                    inline_data=genai_types.Blob(data=jpeg_bytes, mime_type="image/jpeg")
+                ),
+                genai_types.Part(text=_PROMPT),
+            ],
+        )
 
-        for y in range(0, height, chunk_size):
-            chunk = gray_img[y:y + chunk_size, :]
-            texts = reader.readtext(chunk, detail=0, paragraph=True)
-            if texts:
-                all_texts.extend(texts)
-            current_y = min(y + chunk_size, height)
-            print(f"   청크 스캔 중... ({y}px ~ {current_y}px) / 총 {height}px")
-
-        return {"extracted_text": " ".join(all_texts)}
+        extracted = response.text.strip() if response.text else ""
+        print(f"✅ Gemini Vision OCR 완료 — {len(extracted)}자 추출")
+        return {"extracted_text": extracted}
 
     except Exception as e:
-        print(f"❌ OCR 실패: {e}")
+        print(f"❌ Gemini Vision OCR 실패: {e}")
         return {"extracted_text": ""}

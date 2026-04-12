@@ -35,6 +35,7 @@ project_root/
 from __future__ import annotations
 
 import os
+import re
 import sys
 import json
 import uuid
@@ -398,6 +399,17 @@ def search_cert_db(company_aliases: list[str]) -> pd.DataFrame:
 # 메인 분석 파이프라인
 # -----------------------------------------------------------------------------
 def run_analysis(task_id: str, url: str) -> None:
+    import time
+    _t = {}  # 단계별 소요시간 기록
+
+    def tick(label: str):
+        _t[label] = time.time()
+
+    def tock(label: str) -> float:
+        elapsed = round(time.time() - _t.get(label, time.time()), 2)
+        print(f"⏱  [{label}] {elapsed}s")
+        return elapsed
+
     try:
         push_event(task_id, "validate", "URL 검증 중")
         if not is_danawa_url(url):
@@ -405,6 +417,7 @@ def run_analysis(task_id: str, url: str) -> None:
 
         # 1. 크롤링
         push_event(task_id, "crawl", "상품 페이지 크롤링 중")
+        tick("crawl")
         product_json = get_product_data(url)
         if not isinstance(product_json, dict) or not product_json:
             raise RuntimeError("상품 정보를 가져오지 못했습니다.")
@@ -416,34 +429,33 @@ def run_analysis(task_id: str, url: str) -> None:
             {
                 "product_name": product_json.get("model_name", ""),
                 "spec_count": len(product_json.get("specs", {}) or {}),
+                "elapsed": tock("crawl"),
             },
         )
 
         # 2. OCR
         push_event(task_id, "ocr", "OCR 분석 중")
-        try:
-            ocr_result = analyze_ai_washing(product_json)
-        except TypeError:
-            # 기존 함수 시그니처 차이 대비
-            ocr_result = analyze_ai_washing(product_json.get("detail_image_path") or product_json)
+        tick("ocr")
+        image_path = product_json.get("screenshot_path") or product_json.get("detail_image_path") or ""
+        ocr_result = analyze_ai_washing(image_path)
 
         ocr_text = ""
         if isinstance(ocr_result, dict):
             ocr_text = (
-                ocr_result.get("ocr_extracted_text")
+                ocr_result.get("extracted_text")
+                or ocr_result.get("ocr_extracted_text")
                 or ocr_result.get("text")
-                or ocr_result.get("cleaned_text")
                 or ""
             )
-            product_json.update({k: v for k, v in ocr_result.items() if k not in product_json})
         elif isinstance(ocr_result, str):
             ocr_text = ocr_result
 
         product_json["ocr_extracted_text"] = ocr_text
-        push_event(task_id, "ocr_done", "OCR 완료", {"ocr_length": len(ocr_text)})
+        push_event(task_id, "ocr_done", "OCR 완료", {"ocr_length": len(ocr_text), "elapsed": tock("ocr")})
 
         # 3. Gemini OCR 정제
         push_event(task_id, "gemini", "텍스트 정제 및 회사명/모델명 추출 중")
+        tick("gemini")
         gemini_cleaned = clean_ocr_text_with_gemini(product_json)
         if gemini_cleaned:
             product_json["gemini_cleaned"] = gemini_cleaned
@@ -458,27 +470,42 @@ def run_analysis(task_id: str, url: str) -> None:
             {
                 "company_name": (gemini_cleaned or {}).get("company_name", ""),
                 "exact_model_name": (gemini_cleaned or {}).get("exact_model_name", ""),
+                "elapsed": tock("gemini"),
             },
         )
 
         # 4. 정규화
         push_event(task_id, "normalize", "회사명/모델명 정규화 중")
-        norm_info = normalize_data(
-            product_json.get("model_name", ""),
-            refined_text,
-            product_json.get("specs", {}),
-        )
+        tick("normalize")
+        norm_info = normalize_data(product_json)
 
         company_name_guess = (gemini_cleaned or {}).get("company_name") or norm_info.get("company_name") or ""
-        target_company_name = resolve_real_company_name(
+        tick("llm_resolver")
+        raw_resolved = resolve_real_company_name(
             company_name_guess,
             product_json.get("model_name", ""),
-            refined_text,
         ) if company_name_guess else company_name_guess
+
+        # llm_resolver가 설명 문장을 섞어 반환하는 경우가 있어서
+        # 짧고 공백이 적은 세그먼트만 법인명으로 추출
+        def _clean_company_names(raw: str) -> str:
+            parts = [p.strip() for p in raw.split(",") if p.strip()]
+            clean = [p for p in parts if len(p) <= 20 and p.count(" ") <= 1]
+            return ",".join(clean) if clean else (parts[0] if parts else raw)
+
+        target_company_name = _clean_company_names(raw_resolved)
 
         model_param = (gemini_cleaned or {}).get("exact_model_name") or norm_info.get("normalized_model_name") or ""
         has_real_company = bool(target_company_name and target_company_name != "미확인")
-        company_aliases = expand_company_aliases(target_company_name or company_name_guess or "")
+
+        # 회사명 변형(주식회사, (주) 등) 전부 생성
+        company_aliases = []
+        for name in target_company_name.split(","):
+            name = name.strip()
+            if name:
+                company_aliases.extend(expand_company_aliases(name))
+        if not company_aliases:
+            company_aliases = expand_company_aliases(company_name_guess)
 
         push_event(
             task_id,
@@ -488,11 +515,14 @@ def run_analysis(task_id: str, url: str) -> None:
                 "target_company_name": target_company_name,
                 "model_param": model_param,
                 "aliases": company_aliases[:10],
+                "elapsed_normalize": tock("normalize"),
+                "elapsed_llm_resolver": tock("llm_resolver"),
             },
         )
 
         # 5. 병렬 근거 검색
         push_event(task_id, "search", "외부 근거 병렬 검색 중")
+        tick("search")
         with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
             f_kc = executor.submit(
                 search_kc_db,
@@ -523,90 +553,236 @@ def run_analysis(task_id: str, url: str) -> None:
                 "tipa_status": tipa_result.get("status"),
                 "koraia_status": koraia_result.get("status"),
                 "cert_count": 0 if cert_results is None else len(cert_results),
+                "elapsed": tock("search"),
             },
         )
 
         # 6. 특허 검색
         push_event(task_id, "patent", "특허 근거 검색 중")
+        tick("patent")
         patent_items_df = pd.DataFrame()
+        patent_search_type = ""
         try:
-            if target_company_name:
-                patent_result = get_company_patent_data(target_company_name)
-            else:
-                patent_result = get_company_patent_data(company_name_guess)
-
-            if isinstance(patent_result, pd.DataFrame):
+            patent_result = get_company_patent_data(company_aliases or [target_company_name or company_name_guess])
+            if isinstance(patent_result, tuple) and len(patent_result) == 3:
+                _, patent_items_df, patent_search_type = patent_result
+            elif isinstance(patent_result, pd.DataFrame):
                 patent_items_df = patent_result
-            elif isinstance(patent_result, dict):
-                if isinstance(patent_result.get("items"), pd.DataFrame):
-                    patent_items_df = patent_result["items"]
-                elif isinstance(patent_result.get("items"), list):
-                    patent_items_df = pd.DataFrame(patent_result["items"])
-                elif isinstance(patent_result.get("data"), list):
-                    patent_items_df = pd.DataFrame(patent_result["data"])
         except Exception as e:
             print(f"⚠️ 특허 검색 오류: {e}")
 
-        push_event(task_id, "patent_done", "특허 검색 완료", {"patent_count": len(patent_items_df)})
+        push_event(task_id, "patent_done", "특허 검색 완료", {"patent_count": len(patent_items_df), "elapsed": tock("patent")})
 
         # 7. 온톨로지 분석
         push_event(task_id, "analysis", "온톨로지 기반 분석 중")
-        analysis_result = analyze_feature_scraper_bundle(
+        tick("analysis")
+
+        # product_json 키 정규화 (엔진이 기대하는 키명으로 추가)
+        engine_product_json = dict(product_json)
+        engine_product_json.setdefault("name", product_json.get("model_name", ""))
+        engine_product_json.setdefault("ocr_text", product_json.get("ocr_extracted_text", ""))
+        engine_product_json.setdefault("refined_text", refined_text)
+
+        # DataFrame → list of dicts 변환
+        db_records = db_results.to_dict(orient="records") if isinstance(db_results, pd.DataFrame) and not db_results.empty else []
+        cert_records = cert_results.to_dict(orient="records") if isinstance(cert_results, pd.DataFrame) and not cert_results.empty else []
+
+        ar = analyze_feature_scraper_bundle(
             ontology_dir=ONTOLOGY_DIR,
-            product_json=product_json,
-            db_results=db_results,
+            product_json=engine_product_json,
+            norm_info=norm_info,
+            db_results=db_records,
             jodale_result=jodale_result,
             tipa_result=tipa_result,
             koraia_result=koraia_result,
             patent_items_df=patent_items_df,
-            cert_results=cert_results,
+            cert_results=cert_records,
             dart_result=None,
-            seller_text=refined_text,
             target_company_name=target_company_name,
             model_param=model_param,
         )
 
-        ontology_scores = analysis_result.get("ontology_scores", {})
-        top_capabilities = analysis_result.get("top_capabilities", [])
-        reasons = analysis_result.get("reasons", [])
-        verdict = analysis_result.get("verdict", "추가 검토 필요")
-        risk_level = analysis_result.get("risk_level", "중간")
+        tock("analysis")
+        ontology_scores = {
+            "accs":     ar.accs,
+            "raw_accs": ar.raw_accs,
+            "hes":      ar.hes,
+            "tes":      ar.tes,
+            "ces":      ar.ces,
+            "ecs":      ar.ecs,
+            "conf":     ar.conf,
+        }
+        top_capabilities = ar.top_capabilities
+        reasons          = ar.reasons
+        verdict          = ar.verdict
+        risk_level       = ar.risk_level
+
+        # 프론트 호환 계산
+        _accs  = ar.accs  / 100.0
+        _tes   = ar.tes   / 100.0
+        _ces   = ar.ces   / 100.0
+        _hes   = ar.hes   / 100.0
+
+        _VERDICT_CLS = {
+            "신뢰 가능":       "genuine",
+            "추가 검토 필요":  "uncertain",
+            "근거 부족":       "uncertain",
+            "AI Washing 의심": "washing",
+            "불확실":          "uncertain",
+        }
+        verdict_cls = _VERDICT_CLS.get(verdict, "uncertain")
+
+        _color = calc_display_color  # 0-100 스케일 함수 재사용
+        kc_ok      = isinstance(db_results, pd.DataFrame) and not db_results.empty
+        jodale_ok  = jodale_result.get("status") == "등록됨"
+        tipa_ok    = tipa_result.get("status") == "인증기업"
+        koraia_ok  = koraia_result.get("status") == "인증기업"
+        gs_count   = (
+            len(cert_results[cert_results["cert_type"].str.contains("GS", na=False)])
+            if isinstance(cert_results, pd.DataFrame) and not cert_results.empty else 0
+        )
+        patent_count = len(patent_items_df)
+
+        # claims 파싱 (OCR 텍스트에서 AI 주장 문장 추출)
+        AI_KEYWORDS  = ["AI", "인공지능", "딥러닝", "머신러닝", "스마트", "자동", "최적화", "뉴럴", "학습"]
+        VAGUE_WORDS  = ["최고", "최대", "최적", "완벽", "독자적", "혁신", "세계 최초", "업계 최고"]
+        sentences = [s.strip() for s in re.split(r"[.。\n]", ocr_text) if len(s.strip()) > 20][:12]
+        claims = []
+        for sent in sentences:
+            has_ai    = any(k in sent for k in AI_KEYWORDS)
+            has_vague = any(k in sent for k in VAGUE_WORDS)
+            level = "high" if (has_ai and has_vague) else ("medium" if has_ai else "low")
+            flags = []
+            if has_ai:    flags.append({"label": "AI 주장",    "type": "ai"})
+            if has_vague: flags.append({"label": "모호한 표현", "type": "vague"})
+            if not flags: flags.append({"label": "일반 설명",   "type": "ok"})
+            claims.append({"text": sent, "level": level, "flags": flags})
+
+        best_kc = db_results.iloc[0] if kc_ok else None
 
         result = {
+            # 기본 정보
             "requested_url": url,
-            "product_name": product_json.get("model_name", ""),
-            "company_name": target_company_name or company_name_guess,
-            "model_name": model_param,
-            "verdict": verdict,
-            "risk_level": risk_level,
-            "risk_color": calc_display_color(float(ontology_scores.get("accs", 0.0))),
-            "reasons": reasons,
-            "ontology_scores": ontology_scores,
+            "product_name":  product_json.get("model_name", ""),
+            "brand":         target_company_name or company_name_guess,
+            "company_name":  target_company_name or company_name_guess,
+            "model_name":    model_param,
+            "timestamp":     datetime.now().strftime("%Y.%m.%d %H:%M"),
+            "url":           url,
+            # 판정
+            "verdict":      verdict,
+            "verdict_text": verdict,
+            "verdict_cls":  verdict_cls,
+            "risk_level":   risk_level,
+            "risk_color":   _color(ar.accs),
+            # 점수 (0-1 스케일, 프론트 호환)
+            "trust_score":    round(_accs, 2),
+            "text_score":     round(_tes,  2),
+            "verify_score":   round(_ces,  2),
+            "relation_score": round(_hes,  2),
+            # 색상
+            "text_color":     _color(ar.tes),
+            "verify_color":   _color(ar.ces),
+            "relation_color": _color(ar.hes),
+            # 설명
+            "text_desc":     f"기술 근거 점수 {ar.tes:.1f}점 (특허·DART 기반)",
+            "verify_desc":   " / ".join(filter(None, [
+                "전파인증 확인" if kc_ok    else "",
+                "조달청 등록"   if jodale_ok else "",
+                "TIPA 인증"    if tipa_ok   else "",
+                "KORAIA 인증"  if koraia_ok else "",
+            ])) or "공공 인증 미확인",
+            "relation_desc": (
+                f"AI 특허 {patent_count}건" + (f" / GS인증 {gs_count}건" if gs_count else "")
+                if patent_count else "특허·인증 미확인"
+            ),
+            # 텍스트 분석
+            "claims": claims,
+            # 검증 항목
+            "verification": {
+                "kc": {
+                    "ok":     kc_ok,
+                    "detail": (
+                        f"{best_kc['company_name']} / {best_kc.get('model_name','')} — 인증번호 {best_kc.get('cert_no','')}"
+                        if best_kc is not None else "KC 전파인증 DB에서 해당 모델을 찾지 못했습니다."
+                    ),
+                },
+                "jodale": {
+                    "status": jodale_result["status"],
+                    "cls":    "pass" if jodale_ok else ("warn" if jodale_result["status"] == "스킵" else "fail"),
+                    "detail": jodale_result.get("spec") or jodale_result.get("cert") or "해당 없음",
+                },
+                "tipa": {
+                    "status": tipa_result["status"],
+                    "cls":    "pass" if tipa_ok else "fail",
+                    "detail": tipa_result.get("solution_name") or "해당 없음",
+                },
+                "koraia": {
+                    "status": koraia_result["status"],
+                    "cls":    "pass" if koraia_ok else ("warn" if koraia_result["status"] == "목록 없음" else "fail"),
+                },
+                "gs": {
+                    "count":  gs_count,
+                    "detail": f"GS인증 {gs_count}건 포함 총 {len(cert_results)}건 확인" if isinstance(cert_results, pd.DataFrame) and not cert_results.empty else "인증 기록 없음",
+                    "cls":    "pass" if gs_count > 0 else "warn",
+                },
+                "patent": {
+                    "count":       patent_count,
+                    "search_type": patent_search_type,
+                    "brand":       target_company_name or company_name_guess,
+                    "cls":         "pass" if patent_count > 0 else "warn",
+                },
+            },
+            # 구 프론트 호환 필드
+            "patent_count":       patent_count,
+            "gs_count":           gs_count,
+            "relation_score_val": round(_hes, 2),
+            "patent_search_type": patent_search_type,
+            "patents": [
+                {
+                    "title":     str(row.get("발명의명칭(한글)", "제목 없음"))[:60],
+                    "applicant": str(row.get("출원인", "—"))[:20],
+                    "date":      str(row.get("출원일자", "—")),
+                    "status":    str(row.get("등록상태", "—")),
+                }
+                for _, row in patent_items_df.head(15).iterrows()
+            ] if not patent_items_df.empty else [],
+            "certs": [
+                {
+                    "type":   str(row.get("cert_type", "")),
+                    "no":     str(row.get("cert_no", "")),
+                    "name":   str(row.get("product_name", ""))[:50],
+                    "expire": str(row.get("expire_date", "")),
+                }
+                for _, row in cert_results.iterrows()
+            ] if isinstance(cert_results, pd.DataFrame) and not cert_results.empty else [],
+            "specs": [
+                {"key": k, "value": v}
+                for k, v in (product_json.get("specs") or {}).items()
+            ],
+            # 온톨로지 원본
+            "reasons":          reasons,
+            "ontology_scores":  ontology_scores,
             "top_capabilities": top_capabilities,
-            "capability_scores": analysis_result.get("capability_scores", []),
-            "claim_text": analysis_result.get("claim_text", refined_text),
-            # 프런트 호환용 필드(임시 카드가 남아 있을 경우 대비)
-            "text_score": ontology_scores.get("tes", 0.0),
-            "verify_score": ontology_scores.get("ces", 0.0),
-            "relation_score": ontology_scores.get("hes", 0.0),
-            "trust_score": ontology_scores.get("accs", 0.0),
+            "capability_scores": ar.capability_scores,
+            "claim_text":       ar.details.get("claim_text", refined_text),
             # 원본 근거
             "evidence_summary": {
-                "kc_count": len(db_results) if isinstance(db_results, pd.DataFrame) else 0,
-                "patent_count": len(patent_items_df),
-                "cert_count": len(cert_results) if isinstance(cert_results, pd.DataFrame) else 0,
+                "kc_count":      len(db_results) if isinstance(db_results, pd.DataFrame) else 0,
+                "patent_count":  patent_count,
+                "cert_count":    len(cert_results) if isinstance(cert_results, pd.DataFrame) else 0,
                 "jodale_status": jodale_result.get("status"),
-                "tipa_status": tipa_result.get("status"),
+                "tipa_status":   tipa_result.get("status"),
                 "koraia_status": koraia_result.get("status"),
             },
             "raw_data": {
-                "product_json": product_json,
-                "normalized": norm_info,
-                "kc_results": safe_df_records(db_results),
-                "patent_items": safe_df_records(patent_items_df),
-                "cert_results": safe_df_records(cert_results),
+                "product_json":  product_json,
+                "normalized":    norm_info,
+                "kc_results":    safe_df_records(db_results),
+                "patent_items":  safe_df_records(patent_items_df),
+                "cert_results":  safe_df_records(cert_results),
                 "jodale_result": jodale_result,
-                "tipa_result": tipa_result,
+                "tipa_result":   tipa_result,
                 "koraia_result": koraia_result,
             },
         }

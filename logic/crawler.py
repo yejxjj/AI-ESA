@@ -97,21 +97,22 @@ def get_product_data(url):
             detail_area = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "#detail_content_wrap, #productDescriptionArea, .product_detail_area"))
             )
-            
-            # 전체 페이지 높이로 창 크기를 확장하여 짤림 방지
+
+            # 창 높이 최대 12000px로 제한 (너무 크면 스크린샷 타임아웃 발생)
             total_width = driver.execute_script("return document.body.parentNode.scrollWidth")
-            total_height = driver.execute_script("return document.body.parentNode.scrollHeight")
-            driver.set_window_size(total_width, total_height + 2000)
+            total_height = min(driver.execute_script("return document.body.parentNode.scrollHeight"), 12000)
+            driver.set_window_size(total_width, total_height)
             driver.execute_script("arguments[0].scrollIntoView(true);", detail_area)
-            time.sleep(4) 
-            
+            time.sleep(3)
+
             area_height = detail_area.size['height']
             if area_height > 800:
-                detail_area.screenshot(screenshot_file)
+                # 요소 스크린샷 대신 전체 페이지 스크린샷 사용 (안정성 향상)
+                driver.save_screenshot(screenshot_file)
                 product_data["screenshot_path"] = screenshot_file
                 print(f"✅ 상세 이미지 캡처 성공")
-        except Exception:
-            print("⚠️ 상세 영역을 찾지 못해 캡처를 스킵합니다.")
+        except Exception as e:
+            print(f"⚠️ 상세 영역을 찾지 못해 캡처를 스킵합니다. ({e})")
 
         # 5. 텍스트 스펙 표 및 spec_list 보완 로직
         print("📋 [3/3] 텍스트 스펙 수집 중...")
