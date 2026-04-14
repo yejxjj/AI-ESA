@@ -1,6 +1,6 @@
 """
 dart_scraper.py — Open DART API 기반 제품 중심 AI 실체 분석기
-(증거 데이터 5개 추출 및 상세 보고서 자동 생성 버전)
+(숫자 노이즈 제거 + 사업보고서 원문 파싱 및 SW 기업 대응 버전)
 """
 import OpenDartReader
 import json
@@ -17,17 +17,26 @@ except ImportError:
     DART_KEY = os.environ.get("DART_API_KEY", "")
 
 def _clean_dart_text(text: str) -> str:
-    """날짜, DART 접수번호 등 불필요한 노이즈를 제거하여 보고서용 텍스트를 만듭니다."""
-    text = re.sub(r'\b\d{14}\b', '', text)
-    text = re.sub(r'\b\d{8}\b', '', text)
-    text = re.sub(r'\b\d{4}[-.]\d{2}[-.]\d{2}\b', '', text)
-    text = re.sub(r'\b[A-Za-z]\b', '', text)
+    """날짜, 금액, 주식수, DART 접수번호 등 불필요한 숫자 노이즈를 제거하여 문맥만 남깁니다."""
+    if not text: return ""
+    
+    text = re.sub(r'\b\d{14}\b', '', text) 
+    text = re.sub(r'\b\d{8}\b', '', text)  
+    text = re.sub(r'\b\d{4}[-.]\d{2}[-.]\d{2}\b', '', text) 
+    
+    text = re.sub(r'\b\d{1,3}(,\d{3})+\b', '', text) 
+    text = re.sub(r'\b\d{4,}\b', '', text)           
+    text = re.sub(r'\b\d+\.\d+\b', '', text)         
+    text = re.sub(r'\b\d{1,2}\b', '', text)          
+    
+    text = re.sub(r'[-=]{2,}', '', text)             
+    text = re.sub(r'\b[A-Za-z]\b', '', text)         
+    
     return re.sub(r'\s+', ' ', text).strip()
 
 def _evaluate_product_focused_rules(product_name: str, dart_text_data: str) -> dict:
     ai_keywords = ['인공지능', '딥러닝', '머신러닝', '생성형', 'llm', '자연어', '신경망', ' ai ', '(ai)', ' ai,', ' ai.']
-    
-    rnd_keywords = ['연구', '개발', '센터', '랩', 'lab', '투자', '출자', '인수']
+    rnd_keywords = ['연구', '개발', '센터', '랩', 'lab', '투자', '출자', '인수', '사업', '수주', '공급']
     ip_keywords = ['특허', '지식재산', '지적재산', '출원', '등록', 'ip']
 
     prod_tokens = [token for token in product_name.split() if len(token) > 1]
@@ -40,7 +49,7 @@ def _evaluate_product_focused_rules(product_name: str, dart_text_data: str) -> d
         if not any(k in line_lower for k in ai_keywords): continue
         
         clean_context = _clean_dart_text(line)
-        if len(clean_context) < 15: continue # 너무 짧은 문장은 무시
+        if len(clean_context) < 15: continue 
         
         # [A] 제품 직접 언급 (20점)
         exact_prod_match = [pt for pt in prod_tokens if pt.lower() in line_lower]
@@ -48,11 +57,11 @@ def _evaluate_product_focused_rules(product_name: str, dart_text_data: str) -> d
             if product_score == 0: product_score = 20
             evidence_log.append(f"📦 [제품적용] {clean_context}")
 
-        # [B] 연구/투자 (60점)
+        # [B] 사업보고서/연구/투자 (60점) - '사업' 및 '수주' 키워드 추가 대응
         rnd_match = [k for k in rnd_keywords if k in line_lower]
         if rnd_match:
             if rnd_score == 0: rnd_score = 60
-            evidence_log.append(f"💰 [자본/연구투자] {clean_context}")
+            evidence_log.append(f"💰 [사업/연구역량] {clean_context}")
 
         # [C] 특허/IP (20점)
         ip_match = [k for k in ip_keywords if k in line_lower]
@@ -60,17 +69,15 @@ def _evaluate_product_focused_rules(product_name: str, dart_text_data: str) -> d
             if ip_score == 0: ip_score = 20
             evidence_log.append(f"📜 [특허/IP] {clean_context}")
 
-    # 중복 증거 제거 및 최대 5개 선정
     unique_evidences = []
     seen = set()
     for ev in evidence_log:
-        # 문장 유사도 중복 방지를 위해 앞 20자만 체크
         prefix = ev[:20]
         if prefix not in seen:
             unique_evidences.append(ev)
             seen.add(prefix)
     
-    final_evidences = unique_evidences[:5] # 🌟 정확히 5개(또는 이하)로 제한
+    final_evidences = unique_evidences[:5]
 
     return {
         "total_score": min(rnd_score + ip_score + product_score, 100),
@@ -92,35 +99,61 @@ def check_dart_ai_washing(company_name: str, product_name: str = "") -> dict:
         if corp_info.empty:
             return {"status": "비상장사", "total_score": 0, "detail": f"DART 미등록 법인({company_name})은 공시 기반 실적 확인이 불가합니다."}
 
-        years_to_try = ['2024', '2023']
         dart_text_data = ""
 
+        # =========================================================================
+        # 🚀 [업그레이드 1] AI/SW 전문 기업의 핵심 실적인 '공시 제목' 전체 수집
+        # (특허권 취득, 단일판매/공급계약체결 등에 '인공지능' 키워드가 들어가는지 확인)
+        # =========================================================================
+        try:
+            recent_disclosures = dart.list(company_name, start='2023-01-01')
+            if recent_disclosures is not None and not recent_disclosures.empty:
+                titles = recent_disclosures['report_nm'].tolist()
+                dart_text_data += "\n" + "\n".join(titles)
+        except Exception as e:
+            pass
+
+        # =========================================================================
+        # 🚀 [업그레이드 2] 사업보고서 원문(XML) 강제 파싱
+        # (솔트룩스 등 본업이 AI인 회사들의 'II. 사업의 내용' 본문 텍스트 추출)
+        # =========================================================================
+        try:
+            # kind='A'는 정기공시(사업보고서 등)
+            annual_reports = dart.list(company_name, start='2023-01-01', kind='A')
+            if annual_reports is not None and not annual_reports.empty:
+                latest_rcp = annual_reports.iloc[0]['rcp_no']
+                # 사업보고서 원문 XML 다운로드
+                raw_xml = dart.document(latest_rcp)
+                if raw_xml:
+                    # 복잡한 XML/HTML 태그를 정규식으로 모두 벗겨내고 순수 텍스트만 추출
+                    clean_doc = re.sub(r'<[^>]+>', ' ', raw_xml)
+                    dart_text_data += f"\n{clean_doc}"
+        except Exception as e:
+            pass
+
+        # =========================================================================
+        # [기존 로직] 대기업/하드웨어 기업의 타법인출자(투자) 및 직원 현황 유지
+        # =========================================================================
+        years_to_try = ['2024', '2023']
         for year in years_to_try:
             try:
                 investments = dart.report(company_name, '타법인출자', year, '11011')
-                employees = dart.report(company_name, '직원', year, '11011')
-                
                 if investments is not None and not investments.empty:
                     dart_text_data += f"\n{investments.to_string()}"
-                if employees is not None and not employees.empty:
-                    dart_text_data += f"\n{employees.to_string()}"
-                
-                if dart_text_data: break
-            except: continue
+            except: pass
 
-        if not dart_text_data:
-            return {"status": "데이터 없음", "total_score": 0, "detail": "최근 2년간 공시된 상세 투자/인력 내역이 존재하지 않습니다."}
+        if not dart_text_data.strip():
+            return {"status": "데이터 없음", "total_score": 0, "detail": "최근 2년간 공시된 상세 투자/사업 내역이 존재하지 않습니다."}
 
         analysis_result = _evaluate_product_focused_rules(product_name, dart_text_data)
         
-        # 🌟 상세 이유(detail) 문장 생성 로직
         evidences = analysis_result.get("evidence_log", [])
         if evidences:
             detail_text = f"DART 공시 분석 결과, 총 {len(evidences)}건의 핵심 실적 증거가 확인되었습니다:\n\n"
             for i, ev in enumerate(evidences, 1):
                 detail_text += f"      {i}. {ev}\n"
         else:
-            detail_text = "공시 데이터 내에서 AI 연구개발이나 자본 투자와 관련된 실질적 키워드가 발견되지 않았습니다. (워싱 위험성 존재)"
+            detail_text = "공시 원문(사업내용, 계약/특허 공시, 투자 등) 내에서 AI 연구개발이나 자본 투자와 관련된 실질적 키워드가 발견되지 않았습니다."
 
         status_msg = "공시 실적 검증 완료"
         if analysis_result.get("total_score", 0) < 50:
