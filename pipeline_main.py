@@ -103,17 +103,22 @@ def run_full_pipeline(url: str):
         for future in concurrent.futures.as_completed(futures):
             final_results[futures[future]] = future.result()
 
-    score_dart = int(final_results.get('DART', {}).get('total_score', 0) * 0.4)
+    score_dart = int(final_results.get('DART', {}).get('total_score', 0) * 0.3)
     score_kipris = final_results.get('KIPRIS', {}).get('score', 0)
     score_rra = final_results.get('RRA', {}).get('score', 0)
     score_tta = final_results.get('TTA', {}).get('score', 0)
-    score_nipa = final_results.get('AI공급', {}).get('score', 0)
     
-    bonus_pps = final_results.get('조달몰', {}).get('score', 0)
+    # ==========================================
+    # [2] 가산점 지표 산출 (NIPA 이동)
+    # ==========================================
+    bonus_nipa = final_results.get('AI공급', {}).get('score', 0)
     bonus_koneps = final_results.get('나라장터', {}).get('score', 0)
+    bonus_pps = final_results.get('조달몰', {}).get('score', 0)
     bonus_kaiac = final_results.get('KAIAC', {}).get('score', 0)
     
-    final_score = min(score_dart + score_kipris + score_rra + score_tta + score_nipa + bonus_pps + bonus_koneps + bonus_kaiac, 100)
+    # 최종 점수 계산 (최대 100점 상한선)
+    total_raw_score = score_dart + score_kipris + score_rra + score_tta + bonus_nipa + bonus_koneps + bonus_pps + bonus_kaiac
+    final_score = min(total_raw_score, 100)
 
     print("\n" + "="*85)
     print("📄 [1] AI 워싱 검증 이유 보고서 (Detail Report)")
@@ -140,20 +145,20 @@ def run_full_pipeline(url: str):
     print(f"🏢 타겟 법인: {official_company} | 📦 제품/모델: {official_model}")
     print("-" * 85)
 
-    print("\n[코어 지표]")
-    print(f"▶ DART 공시 실적   : {score_dart:02d}점 / 40")
-    print(f"▶ KIPRIS 특허 실적 : {score_kipris:02d}점 / 25")
+    print("\n[코어 지표 (기본: 100점)]")
+    print(f"▶ DART 공시 실적   : {score_dart:02d}점 / 30")
+    print(f"▶ KIPRIS 특허 실적 : {score_kipris:02d}점 / 30")
     print(f"▶ RRA 전파인증     : {score_rra:02d}점 / 20")
-    print(f"▶ TTA/GS 인증      : {score_tta:02d}점 / 05")
-    print(f"▶ AI솔루션 공급기업: {score_nipa:02d}점 / 10")
+    print(f"▶ TTA/GS 인증      : {score_tta:02d}점 / 20")
     
-    print("\n[가산점 지표]")
-    print(f"▶ 조달청 등록 가점 : {bonus_pps:02d}점 / +5")
-    print(f"▶ 나라장터 낙찰 가점: {bonus_koneps:02d}점 / +15")
-    print(f"▶ AI인증센터 가점  : {bonus_kaiac:02d}점 / +5")
+    print("\n[가산점 지표 (최대: +50점)]")
+    print(f"▶ AI솔루션 공급기업: {bonus_nipa:02d}점 / +20")
+    print(f"▶ 나라장터 낙찰 실적: {bonus_koneps:02d}점 / +15")
+    print(f"▶ 조달청 디지털몰  : {bonus_pps:02d}점 / +10")
+    print(f"▶ AI인증센터(KAIAC): {bonus_kaiac:02d}점 / +05")
     print("-" * 85)
     
-    print(f"⭐ 최종 AI 신뢰도 점수 : {final_score} / 100 점")
+    print(f"⭐ 최종 AI 신뢰도 점수 : {final_score} / 100 점 (획득 원점수: {total_raw_score}점)")
     
     if final_score >= 70:
         print("🟢 판정: AI 기술 실체 확인 (워싱 위험 매우 낮음)")
@@ -164,5 +169,5 @@ def run_full_pipeline(url: str):
     print("="*85 + "\n")
 
 if __name__ == "__main__":
-    url = "https://prod.danawa.com/info/?pcode=82630370&keyword=lg+ai&cate=10239280"
+    url = "https://prod.danawa.com/info/?pcode=18767717&keyword=ai%EC%B9%AB%EC%86%94&cate=10348664#bookmark_product_information"
     run_full_pipeline(url)
