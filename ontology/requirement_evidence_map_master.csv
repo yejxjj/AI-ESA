@@ -1,0 +1,170 @@
+capability_id,component_type,component_name_ko,required_level,acceptable_evidence_source,evidence_match_type,match_scope,base_weight,minimum_strength,note_ko
+CAP_OBJECT_DETECTION,HW,카메라 센서,required,kc,hardware_spec,product_or_model,0.95,strong,하드웨어 실체 및 제품 단위 확인
+CAP_OBJECT_DETECTION,HW,카메라 센서,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_OBJECT_DETECTION,HW,카메라 센서,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_OBJECT_DETECTION,SW,객체 감지 모델,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_OBJECT_DETECTION,SW,객체 감지 모델,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_OBJECT_DETECTION,SW,객체 감지 모델,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_OBJECT_DETECTION,SW,객체 추적 모듈,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_OBJECT_DETECTION,SW,객체 추적 모듈,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_OBJECT_DETECTION,SW,객체 추적 모듈,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_OBJECT_DETECTION,SW,객체 추적 모듈,optional,tipa,solution_capability_text,company,0.78,weak,제조 AI/솔루션 보조 근거
+CAP_OBJECT_DETECTION,SW,객체 추적 모듈,optional,koraia,solution_capability_text,company,0.72,weak,협회 등록 보조 근거
+CAP_OBJECT_DETECTION,SW,알림 로직,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_OBJECT_DETECTION,SW,알림 로직,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_OBJECT_DETECTION,SW,알림 로직,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_OBJECT_DETECTION,SW,관심영역 설정 기능,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_OBJECT_DETECTION,SW,관심영역 설정 기능,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_OBJECT_DETECTION,SW,관심영역 설정 기능,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_PERSON_DETECTION,HW,카메라 센서,required,kc,hardware_spec,product_or_model,0.95,strong,하드웨어 실체 및 제품 단위 확인
+CAP_PERSON_DETECTION,HW,카메라 센서,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_PERSON_DETECTION,HW,카메라 센서,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_PERSON_DETECTION,SW,사람 탐지 모델,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_PERSON_DETECTION,SW,사람 탐지 모델,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_PERSON_DETECTION,SW,사람 탐지 모델,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_PERSON_DETECTION,SW,추적 모듈,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_PERSON_DETECTION,SW,추적 모듈,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_PERSON_DETECTION,SW,추적 모듈,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_PERSON_DETECTION,SW,추적 모듈,optional,tipa,solution_capability_text,company,0.78,weak,제조 AI/솔루션 보조 근거
+CAP_PERSON_DETECTION,SW,추적 모듈,optional,koraia,solution_capability_text,company,0.72,weak,협회 등록 보조 근거
+CAP_PERSON_DETECTION,SW,감지 구역 설정,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_PERSON_DETECTION,SW,감지 구역 설정,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_PERSON_DETECTION,SW,감지 구역 설정,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_PERSON_DETECTION,SW,알림 로직,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_PERSON_DETECTION,SW,알림 로직,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_PERSON_DETECTION,SW,알림 로직,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_FACE_DETECTION,HW,카메라 센서,required,kc,hardware_spec,product_or_model,0.95,strong,하드웨어 실체 및 제품 단위 확인
+CAP_FACE_DETECTION,HW,카메라 센서,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_FACE_DETECTION,HW,카메라 센서,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_FACE_DETECTION,SW,얼굴 검출 모델,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_FACE_DETECTION,SW,얼굴 검출 모델,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_FACE_DETECTION,SW,얼굴 검출 모델,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_FACE_DETECTION,SW,알림 로직,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_FACE_DETECTION,SW,알림 로직,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_FACE_DETECTION,SW,알림 로직,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_FACE_RECOGNITION,HW,카메라 센서,required,kc,hardware_spec,product_or_model,0.95,strong,하드웨어 실체 및 제품 단위 확인
+CAP_FACE_RECOGNITION,HW,카메라 센서,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_FACE_RECOGNITION,HW,카메라 센서,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_FACE_RECOGNITION,SW,얼굴 검출 모델,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_FACE_RECOGNITION,SW,얼굴 검출 모델,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_FACE_RECOGNITION,SW,얼굴 검출 모델,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_FACE_RECOGNITION,SW,얼굴 인식/매칭 모듈,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_FACE_RECOGNITION,SW,얼굴 인식/매칭 모듈,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_FACE_RECOGNITION,SW,얼굴 인식/매칭 모듈,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_FACE_RECOGNITION,SW,얼굴 인식/매칭 모듈,required,gs,certification_text,product_or_company,0.8,strong,소프트웨어 인증 보조 근거
+CAP_FACE_RECOGNITION,SW,얼굴 인식/매칭 모듈,required,nep,certification_text,product_or_company,0.8,strong,신기술 인증 보조 근거
+CAP_FACE_RECOGNITION,SW,얼굴 인식/매칭 모듈,required,procurement,registered_function_text,product,0.75,strong,조달 등록 기능 설명 보조 근거
+CAP_FACE_RECOGNITION,SW,출입 제어 로직,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_FACE_RECOGNITION,SW,출입 제어 로직,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_FACE_RECOGNITION,SW,출입 제어 로직,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_SPEECH_RECOGNITION,HW,마이크,required,kc,hardware_spec,product_or_model,0.95,strong,하드웨어 실체 및 제품 단위 확인
+CAP_SPEECH_RECOGNITION,HW,마이크,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_SPEECH_RECOGNITION,HW,마이크,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_SPEECH_RECOGNITION,SW,음성 인식 엔진(ASR),required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_SPEECH_RECOGNITION,SW,음성 인식 엔진(ASR),required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_SPEECH_RECOGNITION,SW,음성 인식 엔진(ASR),required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_SPEECH_RECOGNITION,SW,명령 해석 모듈,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_SPEECH_RECOGNITION,SW,명령 해석 모듈,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_SPEECH_RECOGNITION,SW,명령 해석 모듈,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_SPEECH_RECOGNITION,SW,잡음 제거 모듈,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_SPEECH_RECOGNITION,SW,잡음 제거 모듈,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_SPEECH_RECOGNITION,SW,잡음 제거 모듈,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_SPEAKER_RECOGNITION,HW,마이크,required,kc,hardware_spec,product_or_model,0.95,strong,하드웨어 실체 및 제품 단위 확인
+CAP_SPEAKER_RECOGNITION,HW,마이크,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_SPEAKER_RECOGNITION,HW,마이크,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_SPEAKER_RECOGNITION,SW,화자 특징 추출 모듈,required,gs,certification_text,product_or_company,0.8,strong,소프트웨어 인증 보조 근거
+CAP_SPEAKER_RECOGNITION,SW,화자 특징 추출 모듈,required,nep,certification_text,product_or_company,0.8,strong,신기술 인증 보조 근거
+CAP_SPEAKER_RECOGNITION,SW,화자 특징 추출 모듈,required,procurement,registered_function_text,product,0.75,strong,조달 등록 기능 설명 보조 근거
+CAP_SPEAKER_RECOGNITION,SW,화자 매칭 모듈,required,gs,certification_text,product_or_company,0.8,strong,소프트웨어 인증 보조 근거
+CAP_SPEAKER_RECOGNITION,SW,화자 매칭 모듈,required,nep,certification_text,product_or_company,0.8,strong,신기술 인증 보조 근거
+CAP_SPEAKER_RECOGNITION,SW,화자 매칭 모듈,required,procurement,registered_function_text,product,0.75,strong,조달 등록 기능 설명 보조 근거
+CAP_ANOMALY_DETECTION,HW,상황 의존,required,kc,hardware_spec,product_or_model,0.95,strong,하드웨어 실체 및 제품 단위 확인
+CAP_ANOMALY_DETECTION,HW,상황 의존,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_ANOMALY_DETECTION,HW,상황 의존,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_ANOMALY_DETECTION,SW,이상 탐지 모델/판별 로직,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_ANOMALY_DETECTION,SW,이상 탐지 모델/판별 로직,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_ANOMALY_DETECTION,SW,이상 탐지 모델/판별 로직,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_ANOMALY_DETECTION,SW,이상 탐지 모델/판별 로직,required,gs,certification_text,product_or_company,0.8,strong,소프트웨어 인증 보조 근거
+CAP_ANOMALY_DETECTION,SW,이상 탐지 모델/판별 로직,required,nep,certification_text,product_or_company,0.8,strong,신기술 인증 보조 근거
+CAP_ANOMALY_DETECTION,SW,이상 탐지 모델/판별 로직,required,procurement,registered_function_text,product,0.75,strong,조달 등록 기능 설명 보조 근거
+CAP_ANOMALY_DETECTION,SW,이상 탐지 모델/판별 로직,required,tipa,solution_capability_text,company,0.78,strong,제조 AI/솔루션 보조 근거
+CAP_ANOMALY_DETECTION,SW,이상 탐지 모델/판별 로직,required,koraia,solution_capability_text,company,0.72,strong,협회 등록 보조 근거
+CAP_ANOMALY_DETECTION,SW,정상 패턴 비교 로직,required,gs,certification_text,product_or_company,0.8,strong,소프트웨어 인증 보조 근거
+CAP_ANOMALY_DETECTION,SW,정상 패턴 비교 로직,required,nep,certification_text,product_or_company,0.8,strong,신기술 인증 보조 근거
+CAP_ANOMALY_DETECTION,SW,정상 패턴 비교 로직,required,procurement,registered_function_text,product,0.75,strong,조달 등록 기능 설명 보조 근거
+CAP_ANOMALY_DETECTION,SW,알림 로직,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_ANOMALY_DETECTION,SW,알림 로직,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_ANOMALY_DETECTION,SW,알림 로직,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_BEHAVIOR_ANALYSIS,HW,카메라 또는 동작 관련 센서,required,kc,hardware_spec,product_or_model,0.95,strong,하드웨어 실체 및 제품 단위 확인
+CAP_BEHAVIOR_ANALYSIS,HW,카메라 또는 동작 관련 센서,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_BEHAVIOR_ANALYSIS,HW,카메라 또는 동작 관련 센서,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,행동 인식 모듈,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_BEHAVIOR_ANALYSIS,SW,행동 인식 모듈,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_BEHAVIOR_ANALYSIS,SW,행동 인식 모듈,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_BEHAVIOR_ANALYSIS,SW,행동 인식 모듈,required,gs,certification_text,product_or_company,0.8,strong,소프트웨어 인증 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,행동 인식 모듈,required,nep,certification_text,product_or_company,0.8,strong,신기술 인증 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,행동 인식 모듈,required,procurement,registered_function_text,product,0.75,strong,조달 등록 기능 설명 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,행동 인식 모듈,required,tipa,solution_capability_text,company,0.78,strong,제조 AI/솔루션 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,행동 인식 모듈,required,koraia,solution_capability_text,company,0.72,strong,협회 등록 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,시간 흐름 분석 모듈,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_BEHAVIOR_ANALYSIS,SW,시간 흐름 분석 모듈,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_BEHAVIOR_ANALYSIS,SW,시간 흐름 분석 모듈,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_BEHAVIOR_ANALYSIS,SW,시간 흐름 분석 모듈,required,gs,certification_text,product_or_company,0.8,strong,소프트웨어 인증 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,시간 흐름 분석 모듈,required,nep,certification_text,product_or_company,0.8,strong,신기술 인증 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,시간 흐름 분석 모듈,required,procurement,registered_function_text,product,0.75,strong,조달 등록 기능 설명 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,추적 모듈,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,추적 모듈,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,추적 모듈,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,추적 모듈,optional,tipa,solution_capability_text,company,0.78,weak,제조 AI/솔루션 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,추적 모듈,optional,koraia,solution_capability_text,company,0.72,weak,협회 등록 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,시퀀스 모델링 모듈,optional,kipris,technical_keyword,company_or_product,0.9,weak,특허 기반 기술 기능 근거
+CAP_BEHAVIOR_ANALYSIS,SW,시퀀스 모델링 모듈,optional,dart,business_technical_keyword,company,0.85,weak,공시 기반 AI 사업/기술 근거
+CAP_BEHAVIOR_ANALYSIS,SW,시퀀스 모델링 모듈,optional,seller_page,claim_text,product,0.4,weak,상품 설명 직접 주장
+CAP_BEHAVIOR_ANALYSIS,SW,시퀀스 모델링 모듈,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,시퀀스 모델링 모듈,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_BEHAVIOR_ANALYSIS,SW,시퀀스 모델링 모듈,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_RECOMMENDATION,HW,없음 또는 상황 의존,required,kc,hardware_spec,product_or_model,0.95,strong,하드웨어 실체 및 제품 단위 확인
+CAP_RECOMMENDATION,HW,없음 또는 상황 의존,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_RECOMMENDATION,HW,없음 또는 상황 의존,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_RECOMMENDATION,SW,추천 엔진,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_RECOMMENDATION,SW,추천 엔진,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_RECOMMENDATION,SW,추천 엔진,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_RECOMMENDATION,SW,추천 엔진,required,review,usage_pattern_text,product,0.3,strong,후기 기반 보조 단서
+CAP_RECOMMENDATION,SW,순위화/점수화 로직,required,gs,certification_text,product_or_company,0.8,strong,소프트웨어 인증 보조 근거
+CAP_RECOMMENDATION,SW,순위화/점수화 로직,required,nep,certification_text,product_or_company,0.8,strong,신기술 인증 보조 근거
+CAP_RECOMMENDATION,SW,순위화/점수화 로직,required,procurement,registered_function_text,product,0.75,strong,조달 등록 기능 설명 보조 근거
+CAP_RECOMMENDATION,SW,사용자 프로필 모듈,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_RECOMMENDATION,SW,사용자 프로필 모듈,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_RECOMMENDATION,SW,사용자 프로필 모듈,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_RECOMMENDATION,SW,이력 추적 모듈,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_RECOMMENDATION,SW,이력 추적 모듈,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_RECOMMENDATION,SW,이력 추적 모듈,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_RECOMMENDATION,SW,이력 추적 모듈,optional,tipa,solution_capability_text,company,0.78,weak,제조 AI/솔루션 보조 근거
+CAP_RECOMMENDATION,SW,이력 추적 모듈,optional,koraia,solution_capability_text,company,0.72,weak,협회 등록 보조 근거
+CAP_RECOMMENDATION,SW,상황 정보 모델링,optional,kipris,technical_keyword,company_or_product,0.9,weak,특허 기반 기술 기능 근거
+CAP_RECOMMENDATION,SW,상황 정보 모델링,optional,dart,business_technical_keyword,company,0.85,weak,공시 기반 AI 사업/기술 근거
+CAP_RECOMMENDATION,SW,상황 정보 모델링,optional,seller_page,claim_text,product,0.4,weak,상품 설명 직접 주장
+CAP_PATH_PLANNING_AVOIDANCE,HW,거리 센서 또는 카메라 또는 LiDAR,required,kc,hardware_spec,product_or_model,0.95,strong,하드웨어 실체 및 제품 단위 확인
+CAP_PATH_PLANNING_AVOIDANCE,HW,거리 센서 또는 카메라 또는 LiDAR,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_PATH_PLANNING_AVOIDANCE,HW,거리 센서 또는 카메라 또는 LiDAR,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,HW,연산 장치,required,kc,hardware_spec,product_or_model,0.95,strong,하드웨어 실체 및 제품 단위 확인
+CAP_PATH_PLANNING_AVOIDANCE,HW,연산 장치,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_PATH_PLANNING_AVOIDANCE,HW,연산 장치,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,경로 계획 알고리즘,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,경로 계획 알고리즘,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,경로 계획 알고리즘,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_PATH_PLANNING_AVOIDANCE,SW,장애물 탐지 및 회피 로직,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,장애물 탐지 및 회피 로직,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,장애물 탐지 및 회피 로직,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_PATH_PLANNING_AVOIDANCE,SW,장애물 탐지 및 회피 로직,required,gs,certification_text,product_or_company,0.8,strong,소프트웨어 인증 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,장애물 탐지 및 회피 로직,required,nep,certification_text,product_or_company,0.8,strong,신기술 인증 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,장애물 탐지 및 회피 로직,required,procurement,registered_function_text,product,0.75,strong,조달 등록 기능 설명 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,지도 생성 모듈,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,지도 생성 모듈,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,지도 생성 모듈,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,위치 추정 모듈,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,위치 추정 모듈,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,위치 추정 모듈,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,SLAM 모듈,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,SLAM 모듈,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
+CAP_PATH_PLANNING_AVOIDANCE,SW,SLAM 모듈,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
