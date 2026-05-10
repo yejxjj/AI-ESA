@@ -2,7 +2,7 @@
 dart_scraper.py — Open DART API 기반 제품 중심 AI 실체 분석기
 (숫자 노이즈 제거 + 사업보고서 원문 파싱 및 SW 기업 대응 버전)
 """
-from opendartreader import OpenDartReader
+import OpenDartReader
 import json
 import os
 import sys
