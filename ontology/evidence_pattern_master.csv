@@ -70,3 +70,32 @@ CAP_PATH_PLANNING_AVOIDANCE,strong,text,자율 회피,회피 기능 단서
 CAP_PATH_PLANNING_AVOIDANCE,weak,text,스마트 주행,모호한 표현
 CAP_PATH_PLANNING_AVOIDANCE,weak,text,자동 이동,고정 경로일 수 있음
 CAP_PATH_PLANNING_AVOIDANCE,weak,text,지능형 내비게이션,구체성이 부족한 표현
+CAP_AI_WASH_COURSE,strong,text,ai 세탁,직접 기능 언급
+CAP_AI_WASH_COURSE,strong,text,ai 코스,직접 기능 언급
+CAP_AI_WASH_COURSE,strong,text,ai dd,LG AI 직결모터 기능 언급
+CAP_AI_WASH_COURSE,strong,text,맞춤 세탁,직접 기능 언급
+CAP_AI_WASH_COURSE,strong,text,자동 코스 추천,직접 기능 언급
+CAP_AI_WASH_COURSE,strong,text,ai 맞춤,직접 기능 언급
+CAP_AI_WASH_COURSE,weak,text,스마트 세탁,모호한 표현
+CAP_AI_WASH_COURSE,weak,text,자동 세탁,단순 자동화일 수 있음
+CAP_AI_WASH_COURSE,weak,text,thinq,앱 연동만일 수 있음
+CAP_LAUNDRY_DETECTION,strong,text,세탁물 감지,직접 기능 언급
+CAP_LAUNDRY_DETECTION,strong,text,하중 감지,직접 기능 언급
+CAP_LAUNDRY_DETECTION,strong,text,오염도 감지,직접 기능 언급
+CAP_LAUNDRY_DETECTION,strong,text,소재 감지,직접 기능 언급
+CAP_LAUNDRY_DETECTION,strong,text,세탁물 인식,직접 기능 언급
+CAP_LAUNDRY_DETECTION,weak,text,스마트 감지,모호한 표현
+CAP_LAUNDRY_DETECTION,weak,text,자동 감지,구체성이 부족한 표현
+CAP_ENERGY_OPTIMIZATION,strong,text,ai 에너지,직접 기능 언급
+CAP_ENERGY_OPTIMIZATION,strong,text,에너지 최적화,직접 기능 언급
+CAP_ENERGY_OPTIMIZATION,strong,text,절전 ai,직접 기능 언급
+CAP_ENERGY_OPTIMIZATION,strong,text,에너지 절약 ai,직접 기능 언급
+CAP_ENERGY_OPTIMIZATION,weak,text,스마트 절전,단순 절전 모드일 수 있음
+CAP_ENERGY_OPTIMIZATION,weak,text,에너지 효율,ai 기반 여부 불명확
+CAP_SMART_HOME_CONTROL,strong,text,thinq ai,직접 기능 언급
+CAP_SMART_HOME_CONTROL,strong,text,스마트홈 연동,직접 기능 언급
+CAP_SMART_HOME_CONTROL,strong,text,ai 자동화,직접 기능 언급
+CAP_SMART_HOME_CONTROL,strong,text,원격 ai 제어,직접 기능 언급
+CAP_SMART_HOME_CONTROL,weak,text,앱 연동,단순 앱 제어일 수 있음
+CAP_SMART_HOME_CONTROL,weak,text,wifi 연결,ai 기능 없는 연결일 수 있음
+CAP_SMART_HOME_CONTROL,weak,text,스마트 기기,모호한 표현
