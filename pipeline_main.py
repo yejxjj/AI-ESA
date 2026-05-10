@@ -75,17 +75,30 @@ def search_cert_db_local(company_aliases):
 # 🚀 메인 파이프라인
 # =====================================================================
 def generate_search_terms(raw_name, scraping_aliases):
-    base_list = scraping_aliases if scraping_aliases and len(scraping_aliases) > 1 else [raw_name]
-    extended_list = list(base_list)
-    for name in base_list:
+    # 🎯 [수정] 콤마로 묶여 있는 이름들을 개별 요소로 분리
+    if ',' in raw_name:
+        base_list = [n.strip() for n in raw_name.split(',')]
+    else:
+        base_list = [raw_name]
+    
+    # 크롤링된 별칭이 있다면 합치기
+    if scraping_aliases:
+        base_list.extend(scraping_aliases)
+    
+    extended_list = list(set(base_list)) # 중복 제거
+    
+    # (주), 주식회사 등 접미사 변형 생성
+    final_list = []
+    for name in extended_list:
         if not name: continue
         clean = re.sub(r'\(주\)|주식회사|\(유\)|주\s|' , '', name).strip()
-        if clean and clean not in extended_list:
-            extended_list.append(clean)
-            extended_list.append(f"{clean} 주식회사")
-            extended_list.append(f"{clean}(주)")
-            extended_list.append(f"(주){clean}")
-    return list(set([n.strip() for n in extended_list if n]))
+        if clean:
+            final_list.append(clean)
+            final_list.append(f"{clean} 주식회사")
+            final_list.append(f"{clean}(주)")
+            final_list.append(f"(주){clean}")
+            
+    return list(set([n.strip() for n in final_list if n]))
 
 def run_full_pipeline(url: str):
     if os.path.exists("product_images"):
@@ -114,13 +127,6 @@ def run_full_pipeline(url: str):
     if official_company not in search_aliases:
         search_aliases.insert(0, official_company)
 
-    # =====================================================================
-    TEST_MODE = True
-    if TEST_MODE:
-        official_company = "LG전자"
-        search_aliases = ["LG전자", "엘지전자", "엘지전자 주식회사", "(주)엘지전자"]
-        print(f"\n⚠️ [TEST MODE ON] 검색을 위해 타겟을 '{official_company}'(으)로 고정합니다.")
-    # =====================================================================
 
     print(f"\n🔍 분석 대상: {official_company} / {official_model}")
     print(f"📡 활용 별칭(Aliases): {search_aliases}") 
