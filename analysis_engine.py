@@ -6,6 +6,7 @@ from typing import Dict, List, Any, Optional, Tuple
 import os
 import re
 import math
+import concurrent.futures
 import pandas as pd
 
 
@@ -307,10 +308,10 @@ class OntologyAnalysisEngine:
     # Capability별 점수 계산
     # -----------------------------------------------------
     def _score_all_capabilities(self, evidence_records: List[EvidenceRecord], claim_text: str) -> List[CapabilityScore]:
-        scores: List[CapabilityScore] = []
-        for cap_id in self.repo.get_capability_ids():
-            scores.append(self._score_one_capability(cap_id, evidence_records, claim_text))
-        return scores
+        cap_ids = self.repo.get_capability_ids()
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = {executor.submit(self._score_one_capability, cap_id, evidence_records, claim_text): cap_id for cap_id in cap_ids}
+            return [f.result() for f in concurrent.futures.as_completed(futures)]
 
     def _score_one_capability(self, capability_id: str, evidence_records: List[EvidenceRecord], claim_text: str) -> CapabilityScore:
         cap_name = self.repo.get_capability_name(capability_id)

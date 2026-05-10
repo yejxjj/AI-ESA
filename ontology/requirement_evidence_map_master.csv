@@ -168,3 +168,34 @@ CAP_PATH_PLANNING_AVOIDANCE,SW,위치 추정 모듈,optional,procurement,registe
 CAP_PATH_PLANNING_AVOIDANCE,SW,SLAM 모듈,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
 CAP_PATH_PLANNING_AVOIDANCE,SW,SLAM 모듈,optional,nep,certification_text,product_or_company,0.8,weak,신기술 인증 보조 근거
 CAP_PATH_PLANNING_AVOIDANCE,SW,SLAM 모듈,optional,procurement,registered_function_text,product,0.75,weak,조달 등록 기능 설명 보조 근거
+CAP_AI_WASH_COURSE,HW,하중 및 오염도 센서,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_AI_WASH_COURSE,HW,하중 및 오염도 센서,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_AI_WASH_COURSE,SW,세탁 조건 감지 모델,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_AI_WASH_COURSE,SW,세탁 조건 감지 모델,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_AI_WASH_COURSE,SW,세탁 조건 감지 모델,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_AI_WASH_COURSE,SW,코스 추천 알고리즘,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_AI_WASH_COURSE,SW,코스 추천 알고리즘,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_AI_WASH_COURSE,SW,ThinQ 앱 연동,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_AI_WASH_COURSE,SW,사용 패턴 학습,optional,dart,business_technical_keyword,company,0.85,weak,공시 기반 AI 사업/기술 근거
+CAP_LAUNDRY_DETECTION,HW,하중 센서,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_LAUNDRY_DETECTION,HW,하중 센서,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_LAUNDRY_DETECTION,SW,세탁물 분석 모델,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_LAUNDRY_DETECTION,SW,세탁물 분석 모델,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_LAUNDRY_DETECTION,SW,세탁물 분석 모델,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_LAUNDRY_DETECTION,SW,감지 결과 출력 로직,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_ENERGY_OPTIMIZATION,HW,에너지 측정 모듈,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_ENERGY_OPTIMIZATION,HW,에너지 측정 모듈,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_ENERGY_OPTIMIZATION,SW,에너지 패턴 분석 모델,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_ENERGY_OPTIMIZATION,SW,에너지 패턴 분석 모델,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_ENERGY_OPTIMIZATION,SW,에너지 패턴 분석 모델,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_ENERGY_OPTIMIZATION,SW,동적 절전 제어 로직,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_ENERGY_OPTIMIZATION,SW,사용 스케줄 최적화,optional,tipa,solution_capability_text,company,0.78,weak,제조 AI/솔루션 보조 근거
+CAP_SMART_HOME_CONTROL,HW,통신 모듈,required,rra,hardware_spec,product_or_model,0.95,strong,전파·통신 관련 하드웨어 확인
+CAP_SMART_HOME_CONTROL,HW,통신 모듈,required,seller_page,spec_text,product,0.45,strong,판매 페이지 스펙 보조 근거
+CAP_SMART_HOME_CONTROL,SW,ThinQ AI 플랫폼 연동,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_SMART_HOME_CONTROL,SW,ThinQ AI 플랫폼 연동,required,dart,business_technical_keyword,company,0.85,strong,공시 기반 AI 사업/기술 근거
+CAP_SMART_HOME_CONTROL,SW,ThinQ AI 플랫폼 연동,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_SMART_HOME_CONTROL,SW,AI 자동화 로직,required,kipris,technical_keyword,company_or_product,0.9,strong,특허 기반 기술 기능 근거
+CAP_SMART_HOME_CONTROL,SW,AI 자동화 로직,required,seller_page,claim_text,product,0.4,strong,상품 설명 직접 주장
+CAP_SMART_HOME_CONTROL,SW,원격 제어 인터페이스,optional,gs,certification_text,product_or_company,0.8,weak,소프트웨어 인증 보조 근거
+CAP_SMART_HOME_CONTROL,SW,기기 간 연동 로직,optional,tipa,solution_capability_text,company,0.78,weak,제조 AI/솔루션 보조 근거

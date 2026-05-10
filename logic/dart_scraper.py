@@ -2,7 +2,7 @@
 dart_scraper.py — Open DART API 기반 제품 중심 AI 실체 분석기
 (숫자 노이즈 제거 + 사업보고서 원문 파싱 및 SW 기업 대응 버전)
 """
-import OpenDartReader
+from opendartreader import OpenDartReader
 import json
 import os
 import sys
@@ -94,10 +94,18 @@ def check_dart_ai_washing(company_name: str, product_name: str = "") -> dict:
     try:
         dart = OpenDartReader(DART_KEY)
         corp_list = dart.corp_codes
+
+        # 정확 매칭 먼저, 실패 시 부분 매칭으로 폴백
         corp_info = corp_list[corp_list['corp_name'] == company_name]
-        
+        if corp_info.empty:
+            clean = re.sub(r'\(주\)|주식회사|\(유\)|㈜', '', company_name).strip()
+            corp_info = corp_list[corp_list['corp_name'].str.contains(clean, na=False, regex=False)]
+
         if corp_info.empty:
             return {"status": "비상장사", "total_score": 0, "detail": f"DART 미등록 법인({company_name})은 공시 기반 실적 확인이 불가합니다."}
+
+        # 매칭된 corp_name으로 교체 (API 호출에 정확한 이름 사용)
+        company_name = corp_info.iloc[0]['corp_name']
 
         dart_text_data = ""
 
