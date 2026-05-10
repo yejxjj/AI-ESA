@@ -1,0 +1,15 @@
+source_type,source_name_ko,source_level,credibility_weight,directness_base_weight,update_reliability_weight,description_ko
+kc,KC/전파인증 DB,high,0.95,0.9,0.9,제품 실체와 모델 단위 하드웨어 존재 확인에 강함
+rra,RRA/전파인증,high,0.95,0.92,0.9,통신·전파 장치 관련 제품/모델 확인에 강함
+kipris,KIPRIS 특허,high,0.9,0.65,0.85,기술 보유 및 알고리즘/모델 관련 근거에 강함
+dart,DART 공시,high,0.92,0.55,0.88,기업 차원의 AI 사업·투자·기술 방향 확인에 강함
+procurement,조달청 등록 정보,medium_high,0.78,0.75,0.82,공공 조달 등록 제품 설명 및 기능 확인에 활용
+tipa,TIPA 공급기업/솔루션,medium_high,0.8,0.5,0.8,기업 차원의 AI 솔루션 보유 여부 확인에 활용
+koraia,KORAIA 화이트리스트/협회 정보,medium,0.72,0.45,0.75,기업의 AI 관련 활동 존재 여부 보조 확인
+gs,GS 인증,high,0.88,0.7,0.83,소프트웨어 품질/제품 단위 인증 근거
+nep,NEP 인증,high,0.88,0.68,0.83,신기술성 인증 근거
+seller_page,판매 페이지/상세설명,low,0.4,0.8,0.6,직접 주장 파악에는 유용하지만 자체 홍보이므로 공신력 낮음
+review,후기/리뷰,low,0.3,0.4,0.45,"보조 단서만 가능, 공식 근거로는 약함"
+manual,설명서/브로슈어,medium,0.6,0.75,0.7,제품 기능 설명 보조 근거
+news,기사/보도자료,low_medium,0.45,0.4,0.55,기업 홍보/보도자료일 수 있어 제한적 활용
+other,기타,unknown,0.5,0.5,0.5,출처 불명 또는 일반 참고용

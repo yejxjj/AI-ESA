@@ -1,0 +1,17 @@
+pattern_id,pattern_text_ko,pattern_type,applies_to_capability_id,penalty_weight,severity,description_ko
+NEG_MOTION_ONLY,움직임 감지,confusion,CAP_PERSON_DETECTION,0.45,high,사람 감지로 오인 가능하나 객체 식별 근거가 부족함
+NEG_FACE_BOX_ONLY,얼굴 감지,confusion,CAP_FACE_RECOGNITION,0.55,high,얼굴 존재 탐지와 얼굴 인식/식별은 다름
+NEG_VOICE_OUTPUT,음성 출력,confusion,CAP_SPEECH_RECOGNITION,0.5,high,음성 재생은 음성 인식 근거가 아님
+NEG_VOICE_CMD_ONLY,음성 명령,weak,CAP_SPEAKER_RECOGNITION,0.45,medium,무엇을 말했는지 해석과 누가 말했는지 식별은 다름
+NEG_THRESHOLD_ALERT,임계치 초과 알림,confusion,CAP_ANOMALY_DETECTION,0.5,high,이상 탐지 대신 단순 룰 기반 경보일 수 있음
+NEG_PERSON_ONLY,사람 감지,confusion,CAP_BEHAVIOR_ANALYSIS,0.4,medium,행동 분석 대신 존재 탐지일 수 있음
+NEG_POPULAR_SORT,인기순 추천,confusion,CAP_RECOMMENDATION,0.5,high,개인화/상황 기반 추천이 아닌 단순 정렬일 수 있음
+NEG_FIXED_ROUTE,고정 경로,confusion,CAP_PATH_PLANNING_AVOIDANCE,0.55,high,실시간 경로 계획·회피가 아닌 반복 주행일 수 있음
+NEG_SMART,스마트,vague,ALL,0.18,low,AI 직접 근거가 아닌 일반 마케팅 표현
+NEG_INTELLIGENT,지능형,vague,ALL,0.2,low,AI 기능을 직접 입증하지 않는 포괄 표현
+NEG_AUTO,자동,vague,ALL,0.15,low,자동화와 AI는 동일하지 않음
+NEG_ADVANCED,첨단,vague,ALL,0.12,low,기술 고급화 표현이지만 AI 직접 증거는 아님
+NEG_AI_LIKE,AI급,exaggeration,ALL,0.3,medium,AI와 유사하다는 표현은 실제 AI 탑재를 의미하지 않음
+NEG_SENSOR_ONLY,센서 감지,weak,CAP_OBJECT_DETECTION,0.28,medium,센서 트리거와 객체 인식은 구분 필요
+NEG_BOX_DISPLAY,박스 표시,weak,CAP_FACE_RECOGNITION,0.25,medium,검출 시각화는 식별 근거가 아님
+NEG_KEYWORD_ONLY,최적화,vague,ALL,0.14,low,최적화 단독 표현은 AI 증거로 부족함
