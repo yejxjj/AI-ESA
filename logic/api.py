@@ -150,50 +150,43 @@ def verify_koneps(company_aliases: list) -> dict:
 
 def verify_pps_mall(company_aliases: list) -> dict:
     if not COMMON_DATAGO_KEY: return {"score": 0, "error": "API 키 미설정"}
-    
     url = "http://apis.data.go.kr/1230000/ShoppingMallPrdctInfoService/getShoppingMallPrdctInfoList"
-    search_names = list(set([clean_name(name) for name in company_aliases if len(clean_name(name)) > 1]))
 
-    # API 키 디코딩 (requests 라이브러리가 알아서 인코딩하도록 원본 상태로 만듦)
+    search_names = []
+    for raw_name in company_aliases:
+        split_names = raw_name.split(',') if ',' in raw_name else [raw_name]
+        for s_name in split_names:
+            clean = re.sub(r'\(주\)|주식회사|\(유\)|㈜|^주\s*|\s*주$', '', s_name)
+            clean = re.sub(r'[^\w\s가-힣0-9a-zA-Z]', '', clean).strip()
+            # 한글이 포함되어 있고 길이가 2 이상인 경우만 추가
+            if re.search(r'[가-힣]', clean) and len(clean) > 1:
+                search_names.append(clean)
+
+    search_names = list(set(search_names))
     safe_key = urllib.parse.unquote(COMMON_DATAGO_KEY)
 
     for name in search_names:
         try:
-            params = {
-                'serviceKey': safe_key,
-                'pageNo': '1',
-                'numOfRows': '50',
-                'type': 'json',
-                # URL 인코딩을 직접 하지 않고 requests 모듈의 안전한 변환기에 맡깁니다.
-                'entrpsNm': name 
-            }
+            params = {'serviceKey': safe_key, 'pageNo': '1', 'numOfRows': '10', 'type': 'json', 'entrpsNm': name}
+            response = requests.get(url, params=params, timeout=15)
             
-            response = requests.get(url, params=params, timeout=10)
-            
-            # 조달청 서버가 뻗었을 경우, 전체 프로그램이 터지지 않게 안내만 하고 스킵
             if response.status_code == 500:
-                print(f"[조달몰 서버오류] {name} 조회 실패 - 조달청 API 서버 내부 에러(500)로 스킵합니다.")
+                print(f"⚠️ [조달몰] '{name}' 검색 불가 (조달청 서버 500 에러)")
                 continue
-            elif response.status_code != 200:
-                print(f"[조달몰 통신에러] 응답코드: {response.status_code}")
-                continue
-
-            # 정상 응답 시 파싱 로직
-            try:
+            elif response.status_code == 200:
+                # 🎯 성공 로그 출력
+                print(f"✅ [조달몰] '{name}' 서버 통신 성공 (데이터 분석 중...)")
                 res_json = response.json()
                 items = res_json.get('response', {}).get('body', {}).get('items', [])
+                if isinstance(items, dict): items = items.get('item', [])
+                
                 if items:
-                    prdct_nm = items[0].get('prdctNm', '등록 상품')
-                    return {"score": 5, "evidence": f"몰 등록: {name}", "detail": f"조달청 디지털서비스몰에 상품({prdct_nm} 등) 등록 확인."}
-            except ValueError:
-                print(f"[조달몰 파싱 에러] API 서버가 JSON 대신 오류 페이지를 반환했습니다.")
-                continue
-
+                    target = items[0] if isinstance(items, list) else items
+                    return {"score": 5, "evidence": f"몰 등록: {name}", "detail": f"조달청 디지털서비스몰 상품({target.get('prdctNm', '등록 상품')} 등) 등록 확인."}
         except Exception as e:
-            print(f"[조달몰 예외 발생] 검색 중 에러: {e}")
             continue
             
-    return {"score": 0, "detail": "디지털서비스몰 등록 내역 없음 (또는 서버 응답 불가)", "evidence": None}
+    return {"score": 0, "detail": "조달청 디지털서비스몰 등록 내역 없음", "evidence": None}
 
 def verify_nipa_solution(company_aliases: list) -> dict:
     key = "QnGWF0isjBPG/EXxLVhwkts/GtuhtD3cAEf3bEzXPvt73kfBsPflla8lVoK8VtBQLaTw1rhvMpiMHjIFoX6Pew=="
