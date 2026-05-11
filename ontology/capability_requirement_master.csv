@@ -71,3 +71,6 @@ CAP_SMART_HOME_CONTROL,SW,ThinQ AI 플랫폼 연동,required,스마트홈 AI 플
 CAP_SMART_HOME_CONTROL,SW,AI 자동화 로직,required,사용 패턴 기반 자동 제어 및 제안 기능
 CAP_SMART_HOME_CONTROL,SW,원격 제어 인터페이스,optional,스마트폰 앱을 통한 원격 조작
 CAP_SMART_HOME_CONTROL,SW,기기 간 연동 로직,optional,다른 스마트홈 기기와 상호작용
+CAP_AI_HW_FOUNDATION,HW,무선 통신 모듈,required,Wi-Fi나 블루투스 등 기기 간 연결 및 데이터 송수신을 위한 통신 장치
+CAP_AI_HW_FOUNDATION,HW,스마트 제어 보드,required,AI 알고리즘 구동 및 센서 데이터 처리를 위한 메인 제어 장치
+CAP_AI_HW_FOUNDATION,HW,데이터 수집 센서,optional,"비전, 음성, 환경 데이터 등을 수집하기 위한 입력 장치"
