@@ -57,8 +57,15 @@ def resolve_real_company_name(brand_name, product_name=""):
         return cache[brand_name]
     
     # 🎯 [전략 3] 로컬 LLM 분석
-    print(f"🧠 [로컬 LLM] '{brand_name}' 법인명 추론 중... (CPU 연산)")
-    prompt = f"브랜드명 '{brand_name}'의 한국 공식 법인명(제조사/수입사)을 쉼표로만 나열해. 이름만 출력해."
+    print(f"🧠 [로컬 LLM] '{brand_name}' 법인명 및 별칭 추론 중...")
+    prompt = (
+        f"브랜드 '{brand_name}'의 회사명을 검색용으로 추출해.\n"
+        f"규칙 1: 무조건 '한국 공식 법인명(한글)'을 가장 먼저 써.\n"
+        f"규칙 2: 그 다음 영문명이나 별칭을 써.\n"
+        f"규칙 3: 주식회사, (주) 같은 법인 기호는 절대 쓰지 마.\n"
+        f"출력 예시: 크로스오버존, Crossover\n"
+        f"출력: "
+    )
     result = _ask_local_llm(prompt)
 
     if result:
