@@ -104,3 +104,10 @@ CAP_AI_HW_FOUNDATION,strong,text,IoT 가전,사물인터넷 하드웨어 명시
 CAP_AI_HW_FOUNDATION,strong,text,통신 모듈,하드웨어 부품 직접 명시
 CAP_AI_HW_FOUNDATION,strong,text,센서 탑재,하드웨어 부품 직접 명시
 CAP_AI_HW_FOUNDATION,weak,text,원격 제어,통신 하드웨어가 내장되어 있을 확률 높음
+CAP_SMART_HVAC,weak,text,기류제어,에어컨/공조 관련 직접 언급
+CAP_SMART_HVAC,weak,text,냉동 사이클,스마트 냉동/공조 시스템 기술
+CAP_SMART_HVAC,weak,text,스마트 에어컨,공조 관련 모호한 표현
+CAP_SMART_HVAC,weak,text,시스템 에어컨,공조 관련 표현
+CAP_SMART_HVAC,weak,text,공조 제어,제어 알고리즘 관련 언급
+CAP_SMART_HVAC,weak,text,실내 온도 제어,공조 관련 구체적 언급
+CAP_SMART_HVAC,weak,text,냉난방 온도,에어컨/히터 온도 제어

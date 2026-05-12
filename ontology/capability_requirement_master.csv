@@ -74,3 +74,4 @@ CAP_SMART_HOME_CONTROL,SW,기기 간 연동 로직,optional,다른 스마트홈 
 CAP_AI_HW_FOUNDATION,HW,무선 통신 모듈,required,Wi-Fi나 블루투스 등 기기 간 연결 및 데이터 송수신을 위한 통신 장치
 CAP_AI_HW_FOUNDATION,HW,스마트 제어 보드,required,AI 알고리즘 구동 및 센서 데이터 처리를 위한 메인 제어 장치
 CAP_AI_HW_FOUNDATION,HW,데이터 수집 센서,optional,"비전, 음성, 환경 데이터 등을 수집하기 위한 입력 장치"
+CAP_SMART_HVAC,SW,스마트 제어 알고리즘,optional,온도 및 기류 패턴을 분석하여 최적화하는 AI/제어 모델
