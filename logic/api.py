@@ -168,7 +168,7 @@ def verify_pps_mall(company_aliases: list) -> dict:
     for name in search_names:
         try:
             params = {'serviceKey': safe_key, 'pageNo': '1', 'numOfRows': '10', 'type': 'json', 'entrpsNm': name}
-            response = requests.get(url, params=params, timeout=15)
+            response = requests.get(url, params=params, timeout=10)
             
             if response.status_code == 500:
                 print(f"⚠️ [조달몰] '{name}' 검색 불가 (조달청 서버 500 에러)")
@@ -196,7 +196,7 @@ def verify_nipa_solution(company_aliases: list) -> dict:
     try:
         # 데이터가 500개를 넘어갈 수 있으므로 perPage를 2000으로 대폭 상향
         params = {"page": 1, "perPage": 2000, "returnType": "JSON"}
-        res = requests.get(url, headers=headers, params=params, timeout=10, verify=False)
+        res = requests.get(url, headers=headers, params=params, timeout=15, verify=False)
         
         if res.status_code == 200:
             items = res.json().get('data', [])
