@@ -291,5 +291,5 @@ def run_full_pipeline(url: str):
     print("="*85 + "\n")
 
 if __name__ == "__main__":
-    target_url = "https://prod.danawa.com/info/?pcode=56061341&keyword=%EC%82%BC%EC%84%B1+ai&cate=10243069"
+    target_url = "https://prod.danawa.com/info/?pcode=82630370&keyword=lg+ai&cate=10239280"
     run_full_pipeline(target_url)
